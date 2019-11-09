@@ -1,5 +1,6 @@
 package app;
 
+import app.graphics.Theme;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,8 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -45,10 +44,12 @@ public class Controller {
      * mouse - a Mouse for storing cursor data
      * offset - an Offset for storing offset data
      * theme - a Theme for handling app coloring schemes
+     * confirmCloseOpen - a boolean for storing if the confirm close dialog is open
      */
     private Mouse mouse;
     private Offset offset;
     private Theme theme;
+    private boolean confirmCloseOpen;
 
     // The background of the app
     @FXML
@@ -56,15 +57,29 @@ public class Controller {
     // The title bar of the app
     @FXML
     HBox titleBar;
+    // The minimize image holder
+    @FXML
+    ImageView minimize;
+    // The maximize image holder
+    @FXML
+    ImageView maximize;
+    // The close image holder
+    @FXML
+    ImageView close;
 
     /**
      * Called after all FXML components have been initialized
      */
     @FXML
     public void initialize() {
-        // Initialize mouse, offset instance variables
+
+        // Initialize mouse, offset, confirmCloseOpen instance variables
         mouse = new Mouse();
         offset = new Offset();
+        confirmCloseOpen = false;
+
+        // Setup fx content layout
+        titleBar.prefWidthProperty().bind(anchor.widthProperty());
 
         // Retrieve the theme from a settings file
         theme = new Theme();
@@ -75,6 +90,12 @@ public class Controller {
         // TODO
 
         // Assigns images for title bar image views with recoloring
+        Image closeImage = new Image(getClass().getResource("resources/close.png").toExternalForm());
+        Image maximizeImage = new Image(getClass().getResource("resources/maximize.png").toExternalForm());
+        Image minimizeImage = new Image(getClass().getResource("resources/minimize.png").toExternalForm());
+        close.setImage(closeImage);
+        maximize.setImage(maximizeImage);
+        minimize.setImage(minimizeImage);
         // TODO
 
         // Initiates an animation for app start
@@ -87,13 +108,17 @@ public class Controller {
      */
     @FXML
     public void onTitleBarPressed(MouseEvent mouseEvent) {
-        // Updates mouse data
-        mouse.x = mouseEvent.getScreenX();
-        mouse.y = mouseEvent.getScreenY();
+        // Checks if the confirm close dialog is not open
+        if (!confirmCloseOpen) {
 
-        // Updates offset data
-        offset.x = anchor.getScene().getWindow().getX() - mouse.x;
-        offset.y = anchor.getScene().getWindow().getY() - mouse.y;
+            // Updates mouse data
+            mouse.x = mouseEvent.getScreenX();
+            mouse.y = mouseEvent.getScreenY();
+
+            // Updates offset data
+            offset.x = anchor.getScene().getWindow().getX() - mouse.x;
+            offset.y = anchor.getScene().getWindow().getY() - mouse.y;
+        }
     }
 
     /**
@@ -102,17 +127,79 @@ public class Controller {
      */
     @FXML
     public void onTitleBarDragged(MouseEvent mouseEvent) {
-        // Checks if cursor was not aimed at a title bar button
-        EventTarget target = mouseEvent.getTarget();
+        // Checks if the confirm close dialog is not open
+        if (!confirmCloseOpen) {
 
-        // Updates mouse data
-        mouse.x = mouseEvent.getScreenX();
-        mouse.y = mouseEvent.getScreenY();
+            // Checks if cursor was not aimed at a title bar button
+            EventTarget target = mouseEvent.getTarget();
+            if (!(target == minimize || target == maximize || target == close)) {
 
-        // Updates program window location based on mouse and offset data
-        anchor.getScene().getWindow().setX(mouse.x + offset.x);
-        anchor.getScene().getWindow().setY(mouse.y + offset.y);
+                // Updates mouse data
+                mouse.x = mouseEvent.getScreenX();
+                mouse.y = mouseEvent.getScreenY();
+
+                // Updates program window location based on mouse and offset data
+                anchor.getScene().getWindow().setX(mouse.x + offset.x);
+                anchor.getScene().getWindow().setY(mouse.y + offset.y);
+            }
+        }
     }
+
+
+    /**
+     * Minimizes the program window upon the minimize button being clicked
+     * @param mouseEvent - a MouseEvent that holds the properties of the calling event
+     */
+    @FXML
+    public void onMinimizeClicked(MouseEvent mouseEvent) {
+        Stage stage = (Stage) anchor.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    /**
+     * Maximizes the program window upon the maximize button being clicked
+     * @param mouseEvent - a MouseEvent that holds the properties of the calling event
+     */
+    @FXML
+    public void onMaximizeClicked(MouseEvent mouseEvent) {
+        Stage stage = (Stage) anchor.getScene().getWindow();
+        stage.setMaximized(true);
+    }
+
+    /**
+     * Calls the close confirmation dialog box to open upon the close button being clicked
+     * @param mouseEvent - a MouseEvent that holds the properties of the calling event
+     */
+    @FXML
+    public void onCloseClicked(MouseEvent mouseEvent) {
+        //Checks if the close confirmation dialog box is already open
+        if(!confirmCloseOpen)
+            try {
+                // Loads the fxml file
+                Stage primaryStage = (Stage) anchor.getScene().getWindow();
+                Parent root = FXMLLoader.load(getClass().getResource("close-confirm.fxml"));
+                Stage stage = new Stage();
+
+                // Beautifies the program with a transparent background
+                stage.initStyle(StageStyle.TRANSPARENT);
+                Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
+
+                // Finishes stage setup which sets confirmCloseOpen to true now and to false upon the stage's exit
+                stage.setScene(scene);
+                stage.initOwner(primaryStage);
+                stage.setOnHidden(eventHandler -> confirmCloseOpen = false);
+                confirmCloseOpen = true;
+
+                // Shows the confirmation dialog box
+                stage.show();
+            } catch(Exception e) {
+                // Print the stack trace of the exception and exit
+                e.printStackTrace();
+                System.exit(0);
+            }
+    }
+
 
 }
 

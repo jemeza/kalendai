@@ -8,15 +8,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane fx:id="anchor" prefHeight="336.0" prefWidth="409.0" xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/2.2" fx:controller="app.Controller">
+<AnchorPane fx:id="anchor" prefHeight="336.0" prefWidth="409.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="app.Controller">
   <children>
-    <HBox fx:id="titleBar" layoutX="0.0" layoutY="0.0" minHeight="30.0"
-          onMouseDragged="#onTitleBarDragged"
-          onMousePressed="#onTitleBarPressed"
-          prefHeight="30.0" prefWidth="409.0" style="-fx-background-color: #999999&#10;&#10;">
+    <HBox fx:id="titleBar" alignment="CENTER_RIGHT" layoutX="0.0" layoutY="0.0" minHeight="30.0" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="30.0" prefWidth="409.0" style="-fx-background-color: #999999&#10;&#10;">
       <children>
-        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView id="close" fx:id="minimize" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onMinimizeClicked" pickOnBounds="true" preserveRatio="true" />
+        <ImageView id="close" fx:id="maximize" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onMaximizeClicked" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="close" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onCloseClicked" pickOnBounds="true" preserveRatio="true" />
       </children>
     </HBox>
   </children>
