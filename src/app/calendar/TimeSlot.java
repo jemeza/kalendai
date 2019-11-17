@@ -1,20 +1,22 @@
 package app.calendar;
 
 /*
- * duration.java-a kalendai class that is a characteristic of timeSlot
+ * TimeSlot.java - a kalendai class that is a characteristic of TimeSlot
  */
-public class timeSlot {
-    private time startT;
-    private time endT;
+public class TimeSlot {
+    public int id;
+    private static int idOn = 0;
+    private Time startT;
+    private Time endT;
     private String title="Title";
     private String description="Description";
-    private duration duration;
+    private Duration duration;
     private Priority importance;
 
     /*
      * test overload
      */
-    public timeSlot(String start){
+    public TimeSlot(String start){
         this(start, start, "", null, "", Priority.Normal);
     }
 
@@ -79,20 +81,22 @@ public class timeSlot {
      * @param newDescription - description
      * @param newImportance - importance
      */
-    public timeSlot(String start, String ending, String newTitle, String newDuration, String newDescription, Priority newImportance){
+    public TimeSlot(String start, String ending, String newTitle, String newDuration, String newDescription, Priority newImportance){
         editTimeSlot(start, ending, newTitle, newDuration, newDescription, newImportance);
+        id = idOn;
+        idOn++;
     }
 
     public void editTimeSlot(String start, String ending, String newTitle, String newDuration, String newDescription, Priority newImportance){
-        startT = new time(start);
-        endT = new time(ending);
+        startT = new Time(start);
+        endT = new Time(ending);
         title=newTitle;
-        duration= new duration(newDuration);
+        duration= new Duration(newDuration);
         description=newDescription;
         importance=newImportance;
     }
 
-    public duration getDuration(){
+    public Duration getDuration(){
         return duration;
     }
     public String getTitle(){
@@ -101,10 +105,13 @@ public class timeSlot {
     public String getDescription(){
         return description;
     }
-    public time getStart(){
+    public Time getStart(){
         return startT;
     }
-    public time getEndT(){
+    public Time getEndT(){
         return endT;
+    }
+    public Priority getImportance() {
+        return importance;
     }
 }

@@ -1,15 +1,14 @@
 package app.calendar;
 
-import javafx.beans.binding.NumberExpression;
 /*
-* duration.java-a kalendai class that is a characteristic of timeSlot
+* Duration.java - a kalendai class that sets the duration characteristic of a TimeSlot
 */
-public class duration {
+public class Duration {
     String durationT;
     int hours;
     int min;
 
-    public duration(String timeStr) {
+    public Duration(String timeStr) {
         timeStr=timeStr.toLowerCase();
         if(timeStr.contains(".")){
             hours=Integer.parseInt(timeStr.substring(0, timeStr.indexOf(".")));
@@ -36,7 +35,7 @@ public class duration {
         //String "1hr 30 min" or "1hour30min" or "1h30m" or "1:30" or "1.5 hours"
     }
 
-    public duration(time start, time end) {
+    public Duration(Time start, Time end) {
         hours = end.getMilitaryHour()-start.getMilitaryHour() ;
         min = end.getMin()-start.getMin() ;
         while (min < 0) {
@@ -52,5 +51,14 @@ public class duration {
     }
     public String getDurationString(){
         return String.format("%02d", hours)+":"+ String.format("%02d", min);
+    }
+
+    public boolean greaterThan(Duration duration) {
+        int thisMinutes = getAbsoluteMin();
+        int compMinutes = duration.getAbsoluteMin();
+        return thisMinutes > compMinutes;
+    }
+    public int getAbsoluteMin() {
+        return hours * 60 + min;
     }
 }
