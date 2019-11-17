@@ -2,9 +2,9 @@
 package app.calendar;
 
 /*
- * time.java-a kalendai class that organizes that sets the time characteristic of time slot
+ * Time.java - a kalendai class that organizes that sets the Time characteristic of TimeSlot
  */
-public class time {
+public class Time {
     //String standardTime;
     //String militaryTime;
     int hour;
@@ -16,7 +16,7 @@ public class time {
      *
      * @param String time is a string that contains the time
      */
-    public time(String time){
+    public Time(String time){
         timeHelper(time);
     }
 
@@ -28,7 +28,7 @@ public class time {
             hour += Integer.parseInt(timeStr.substring(0, timeStr.indexOf(':')));
         } catch (NumberFormatException e) {
 //        hour = 12;
-       }
+        }
         timeStr=timeStr.toLowerCase();
         if((timeStr.contains("am")||timeStr.contains("pm")) && hour<=12){
             if(timeStr.contains("am")) {
@@ -52,7 +52,7 @@ public class time {
         }
         keepWithinRange();
     }
-    void keepWithinRange(){
+    private void keepWithinRange(){
         if(min>=60){
             hour++;
             min%=60;
@@ -84,7 +84,7 @@ public class time {
         return hour;
     }
 
-    public boolean getIsAM(){
+    public boolean isAM(){
         return isAM;
     }
     public String getMilitaryTimeString(){
@@ -101,5 +101,8 @@ public class time {
             standardTime += "pm";
         }
         return standardTime;
+    }
+    public int getAbsoluteMin() {
+        return hour * 60 + min;
     }
 }

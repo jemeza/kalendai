@@ -1,31 +1,28 @@
 package app.calendar;
 
 /*
- * duration.java-a kalendai class that is a characteristic of timeSlot
+ * TimeSlot.java - a kalendai class that is a characteristic of TimeSlot
  */
-public class timeSlot {
-    public time startT;
-    public time endT;
-    public String title="Title";
-    public String description="Description";
-    public duration duration;
-    public int importance;
-     String color="blue";
+public class TimeSlot {
+    public int id;
+    private static int idOn = 0;
+    private Time startT;
+    private Time endT;
+    private String title="Title";
+    private String description="Description";
+    private Duration duration;
+    private Priority importance;
 
-    public timeSlot(String start){
-        startT = new time(start);
-        endT = new time(start);
-        endT.hour++;
-        duration = new duration(startT, endT);
-        title="Title";
-        importance=5;
+    /*
+     * test overload
+     */
+    public TimeSlot(String start){
+        this(start, start, "", null, "", Priority.Normal);
     }
 
+    /*
     public timeSlot(String start, String ending){
-        startT = new time(start);
-        endT = new time(ending);
-        duration = new duration(startT, endT);
-        importance=5;
+        this(start, ending, "Title");
     }
 
     public timeSlot(String start, String ending, String newTitle){
@@ -33,7 +30,7 @@ public class timeSlot {
         endT = new time(ending);
         duration = new duration(startT, endT);
         title=newTitle;
-        importance=5;
+        importance=Priority.Normal;
     }
 
     public timeSlot(String start, String ending, String newTitle, String newDuration){
@@ -41,7 +38,7 @@ public class timeSlot {
         endT = new time(ending);
         duration = new duration(startT, endT);
         title=newTitle;
-        importance=5;
+        importance=Priority.Normal;
         duration= new duration(newDuration);
     }
     public timeSlot(String start, String ending, String newTitle, String newDuration, String newDescription){
@@ -59,7 +56,6 @@ public class timeSlot {
         endT = new time(ending);
         duration = new duration(startT, endT);
         title=newTitle;
-        importance=5;
         duration= new duration(newDuration);
         description=newDescription;
         importance=newImportance;
@@ -69,13 +65,38 @@ public class timeSlot {
         endT = new time(ending);
         duration = new duration(startT, endT);
         title=newTitle;
-        importance=5;
         duration= new duration(newDuration);
         description=newDescription;
         importance=newImportance;
         color=newColor;
     }
-    public duration getDuration(){
+    */
+
+    /**
+     * timeSlot object which handles creating a time slot
+     * @param start - start time
+     * @param ending - end time
+     * @param newTitle - title
+     * @param newDuration - duration
+     * @param newDescription - description
+     * @param newImportance - importance
+     */
+    public TimeSlot(String start, String ending, String newTitle, String newDuration, String newDescription, Priority newImportance){
+        editTimeSlot(start, ending, newTitle, newDuration, newDescription, newImportance);
+        id = idOn;
+        idOn++;
+    }
+
+    public void editTimeSlot(String start, String ending, String newTitle, String newDuration, String newDescription, Priority newImportance){
+        startT = new Time(start);
+        endT = new Time(ending);
+        title=newTitle;
+        duration= new Duration(newDuration);
+        description=newDescription;
+        importance=newImportance;
+    }
+
+    public Duration getDuration(){
         return duration;
     }
     public String getTitle(){
@@ -83,5 +104,14 @@ public class timeSlot {
     }
     public String getDescription(){
         return description;
+    }
+    public Time getStart(){
+        return startT;
+    }
+    public Time getEndT(){
+        return endT;
+    }
+    public Priority getImportance() {
+        return importance;
     }
 }
