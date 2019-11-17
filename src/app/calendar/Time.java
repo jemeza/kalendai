@@ -66,6 +66,10 @@ public class Time {
         return min;
     }
 
+    /**
+     * Gets the hour in military time
+     * @return int - hour between 0 and 23
+     */
     public int getMilitaryHour(){
         keepWithinRange();
         return hour;

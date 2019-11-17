@@ -50,7 +50,16 @@ public class Duration {
         return hours;
     }
     public String getDurationString(){
-        return Integer.toString(hours)+" hour(s) "+ Integer.toString(min)+ " min";
+        return String.format("%02d", hours)+":"+ String.format("%02d", min);
+    }
+
+    public boolean greaterThan(Duration duration) {
+        int thisMinutes = getAbsoluteMin();
+        int compMinutes = duration.getAbsoluteMin();
+        return thisMinutes > compMinutes;
+    }
+    public int getAbsoluteMin() {
+        return hours * 60 + min;
     }
 
     public boolean greaterThan(Duration duration) {
